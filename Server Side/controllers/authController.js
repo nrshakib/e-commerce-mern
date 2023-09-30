@@ -1,7 +1,7 @@
 import userModel from "../models/userModel.js";
-import hashPassword from "../handlers/authHandler.js";
+import {hashPassword} from "../handlers/authHandler.js";
 
-const registerController = async () => {
+const registerController = async (req,res) => {
   try {
     const { name, email, phone, address, password } = req.body;
 
@@ -23,7 +23,7 @@ const registerController = async () => {
     }
 
     //check existing user
-    const existingUser = await userModel.finfOne({ email });
+    const existingUser = await userModel.findOne({ email });
 
     //existing user
     if (existingUser) {
@@ -37,7 +37,7 @@ const registerController = async () => {
     const hashedPassword = await hashPassword(password);
 
     //save user
-    const user = new userModel({
+    const user = await new userModel({
       name,
       email,
       phone,
